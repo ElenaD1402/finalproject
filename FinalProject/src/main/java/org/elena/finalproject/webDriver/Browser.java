@@ -6,11 +6,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class Browser {
 
     public static final long DEFAULT_TIME_OUT = 10L;
-    public static final int TIME_OUT_IN_SECONDS = 20;
+    public static final int TIME_OUT_IN_SECONDS = 10;
 
     private static WebDriver webDriver;
 
@@ -58,6 +59,18 @@ public class Browser {
         }
     }
 
+    public static List<WebElement> waitForElementsToBeVisible(By locator) {
+        try {
+            WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(TIME_OUT_IN_SECONDS));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+            List<WebElement> listElement = getWebDriver().findElements(locator);
+            return listElement;
+        } catch (NotFoundException ex) {
+            System.out.println(ex.getMessage());
+            return null;
+        }
+    }
+
     public static WebElement waitForElementToBePresent(By locator) {
         try {
             WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(TIME_OUT_IN_SECONDS));
@@ -85,14 +98,9 @@ public class Browser {
         }
     }
 
-    public static void waitUploading(By locator) {
-        try {
+    public static void waitDeleting(WebElement webElement) {
             WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(TIME_OUT_IN_SECONDS));
-            wait.until(ExpectedConditions.presenceOfElementLocated(locator));
-            WebElement element = getWebDriver().findElement(locator);
-        } catch (NotFoundException ex) {
-            System.out.println(ex.getMessage());
-        }
+            wait.until(ExpectedConditions.invisibilityOf(webElement));
     }
 
     public static void scroll(WebElement webElement) {

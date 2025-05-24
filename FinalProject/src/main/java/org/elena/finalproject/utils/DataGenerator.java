@@ -1,4 +1,4 @@
-package org.elena.finalproject.tests.utils;
+package org.elena.finalproject.utils;
 
 import java.util.List;
 import java.util.Random;
@@ -8,7 +8,7 @@ public class DataGenerator {
     private static final Random random = new Random();
     private static final String alphabet = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
     public static List<String> categoriesList = List.of("Books", "Music", "Series", "Games", "Sport");
-    public static List<String> tagsList = List.of("tag1", "tag2", "tag3", "tag4", "tag5");
+    public static List<String> tagsList = List.of("Tag1", "Tag2", "Tag3", "Tag4", "Tag5");
 
     public static String getRandomString(int length) {
         StringBuilder sb = new StringBuilder(length);
