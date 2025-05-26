@@ -11,7 +11,7 @@ import java.util.List;
 public class Browser {
 
     public static final long DEFAULT_TIME_OUT = 10L;
-    public static final int TIME_OUT_IN_SECONDS = 10;
+    public static final int TIME_OUT_IN_SECONDS = 20;
 
     private static WebDriver webDriver;
 
@@ -41,7 +41,7 @@ public class Browser {
             wait.until(ExpectedConditions.elementToBeClickable(locator));
             WebElement element = getWebDriver().findElement(locator);
             return element;
-        } catch (NotFoundException ex) {
+        } catch (NotFoundException | TimeoutException ex) {
             System.out.println(ex.getMessage());
             return null;
         }
@@ -99,8 +99,13 @@ public class Browser {
     }
 
     public static void waitDeleting(WebElement webElement) {
-            WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(TIME_OUT_IN_SECONDS));
-            wait.until(ExpectedConditions.invisibilityOf(webElement));
+        WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(TIME_OUT_IN_SECONDS));
+        wait.until(ExpectedConditions.invisibilityOf(webElement));
+    }
+
+    public static void waitRefreshing(By locator) {
+        WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(TIME_OUT_IN_SECONDS));
+        wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(locator)));
     }
 
     public static void scroll(WebElement webElement) {
@@ -115,15 +120,17 @@ public class Browser {
         getWebDriver().switchTo().alert().accept();
     }
 
-    public static void unhide(WebElement webElement) {
-        String script = "arguments[0].style.opacity=1;"
-                + "arguments[0].style['transform']='translate(0px, 0px) scale(1)';"
-                + "arguments[0].style['MozTransform']='translate(0px, 0px) scale(1)';"
-                + "arguments[0].style['WebkitTransform']='translate(0px, 0px) scale(1)';"
-                + "arguments[0].style['msTransform']='translate(0px, 0px) scale(1)';"
-                + "arguments[0].style['OTransform']='translate(0px, 0px) scale(1)';"
-                + "return true;";
-        getJavascriptExecutor().executeScript(script, webElement);
+    public static void switchToFrame(WebElement frame) {
+        getWebDriver().switchTo().frame(frame);
+    }
+
+    public static void switchToDefaultContent() {
+        getWebDriver().switchTo().defaultContent();
+    }
+
+    public static void pressKey(Keys key) {
+        Actions pressKey = new Actions(getWebDriver());
+        pressKey.keyDown(String.valueOf(key)).keyUp(String.valueOf(key)).perform();
     }
 
     public static void close() {

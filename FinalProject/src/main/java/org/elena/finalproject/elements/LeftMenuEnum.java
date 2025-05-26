@@ -12,7 +12,7 @@ public enum LeftMenuEnum {
     TOOLS("menu-tools"),
     SETTINGS("menu-settings"),
     PERFORMANCE("toplevel_page_w3tc_dashboard"),
-    SMUSH("toplevel_page_smush"); //xPath *[@id='toplevel_page_smush']
+    SMUSH("toplevel_page_smush");
 
     private String id;
 
