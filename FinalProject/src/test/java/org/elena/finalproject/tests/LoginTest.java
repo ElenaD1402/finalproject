@@ -3,10 +3,13 @@ package org.elena.finalproject.tests;
 import org.elena.finalproject.credentials.UserEnum;
 import org.elena.finalproject.elements.LeftMenuEnum;
 import org.elena.finalproject.models.Category;
+import org.elena.finalproject.models.Page;
 import org.elena.finalproject.models.Post;
 import org.elena.finalproject.pages.*;
 import org.elena.finalproject.pages.media.AddNewMediaFilePage;
 import org.elena.finalproject.pages.media.MediaPage;
+import org.elena.finalproject.pages.pages.AddNewPagePage;
+import org.elena.finalproject.pages.pages.PagesPage;
 import org.elena.finalproject.pages.posts.AddNewPostPage;
 import org.elena.finalproject.pages.posts.CategoriesPage;
 import org.elena.finalproject.pages.posts.PostsPage;
@@ -198,6 +201,7 @@ public class LoginTest {
         loginPage.logIn(UserEnum.ADMINISTRATOR);
         DashboardPage dashboardPage = new DashboardPage();
         Assert.assertTrue(dashboardPage.isPageOpened(), "Dashboard page is not opened");
+        Browser.makeScreenshot();
         dashboardPage.getLeftMenu().hoverOverItem(LeftMenuEnum.POSTS);
         dashboardPage.getLeftMenu().getPostsMenu().addNewPost();
         AddNewPostPage addNewPostPage = new AddNewPostPage();
@@ -212,15 +216,98 @@ public class LoginTest {
         addNewPostPage.addNewPostWithCategoryAndTag(post, category, tag);
     }
 
+
+
+
+
+
     @Test
-    public void testPage() {
-
-
-
-
-
-
+    public void testDraftPage() {
+        Browser.getWebDriver().get(Configuration.getBaseUrl());
+        LoginPage loginPage = new LoginPage();
+        Assert.assertTrue(loginPage.isPageOpened(), "Login page is not opened");
+        loginPage.logIn(UserEnum.ADMINISTRATOR);
+        DashboardPage dashboardPage = new DashboardPage();
+        Assert.assertTrue(dashboardPage.isPageOpened(), "Dashboard page is not opened");
+        dashboardPage.getLeftMenu().hoverOverItem(LeftMenuEnum.PAGES);
+        dashboardPage.getLeftMenu().getPagesMenu().addNewPage();
+        AddNewPagePage addNewPagePage = new AddNewPagePage();
+        Assert.assertTrue(addNewPagePage.isPageOpened(), "Add new page page is not opened");
+        String pageTitle = DataGenerator.getRandomString(15);
+        String pageBlock = DataGenerator.getRandomString(50);
+        Page page = Page.builder().title(pageTitle).block(pageBlock).build();
+        addNewPagePage.addNewPageDraft(page);
+        addNewPagePage.goToPagesPage();
+        PagesPage pagesPage = new PagesPage();
+        Assert.assertTrue(pagesPage.isDraftPageAdded(page), "Draft page is not added");
+        pagesPage.deletePage(page);
+        DeletionPage deletionPage = new DeletionPage();
+        Assert.assertTrue(deletionPage.isPageOpened(), "Page is not deleted");
+        deletionPage.getHeader().goToBasePage();
+        HomePage homePage = new HomePage();
+        homePage.getLeftMenu().clickItem(LeftMenuEnum.PAGES);
+        Assert.assertTrue(pagesPage.isPageDeleted(page), "Page is not deleted");
     }
+
+    @Test
+    public void testPageWithoutPattern() {
+        Browser.getWebDriver().get(Configuration.getBaseUrl());
+        LoginPage loginPage = new LoginPage();
+        Assert.assertTrue(loginPage.isPageOpened(), "Login page is not opened");
+        loginPage.logIn(UserEnum.ADMINISTRATOR);
+        DashboardPage dashboardPage = new DashboardPage();
+        Assert.assertTrue(dashboardPage.isPageOpened(), "Dashboard page is not opened");
+        dashboardPage.getLeftMenu().hoverOverItem(LeftMenuEnum.PAGES);
+        dashboardPage.getLeftMenu().getPagesMenu().addNewPage();
+        AddNewPagePage addNewPagePage = new AddNewPagePage();
+        Assert.assertTrue(addNewPagePage.isPageOpened(), "Add new page page is not opened");
+        String pageTitle = DataGenerator.getRandomString(15);
+        String pageBlock = DataGenerator.getRandomString(50);
+        Page page = Page.builder().title(pageTitle).block(pageBlock).build();
+        addNewPagePage.addNewPageWithoutPattern(page);
+        addNewPagePage.goToPagesPage();
+        PagesPage pagesPage = new PagesPage();
+        Assert.assertTrue(pagesPage.isPageAdded(page), "Page is not added");
+        pagesPage.deletePage(page);
+        DeletionPage deletionPage = new DeletionPage();
+        Assert.assertTrue(deletionPage.isPageOpened(), "Page is not deleted");
+        deletionPage.getHeader().goToBasePage();
+        HomePage homePage = new HomePage();
+        homePage.getLeftMenu().clickItem(LeftMenuEnum.PAGES);
+        Assert.assertTrue(pagesPage.isPageDeleted(page), "Page is not deleted");
+    }
+
+    @Test
+    public void testPageWithPattern() {
+        Browser.getWebDriver().get(Configuration.getBaseUrl());
+        LoginPage loginPage = new LoginPage();
+        Assert.assertTrue(loginPage.isPageOpened(), "Login page is not opened");
+        loginPage.logIn(UserEnum.ADMINISTRATOR);
+        DashboardPage dashboardPage = new DashboardPage();
+        Assert.assertTrue(dashboardPage.isPageOpened(), "Dashboard page is not opened");
+        dashboardPage.getLeftMenu().hoverOverItem(LeftMenuEnum.PAGES);
+        dashboardPage.getLeftMenu().getPagesMenu().addNewPage();
+        AddNewPagePage addNewPagePage = new AddNewPagePage();
+        Assert.assertTrue(addNewPagePage.isPageOpened(), "Add new page page is not opened");
+        String pageTitle = DataGenerator.getRandomString(15);
+        Page page = Page.builder().title(pageTitle).build();
+        addNewPagePage.addNewPageWithAboutPattern(page);
+        addNewPagePage.goToPagesPage();
+        PagesPage pagesPage = new PagesPage();
+        Assert.assertTrue(pagesPage.isPageAdded(page), "Page is not added");
+        pagesPage.deletePage(page);
+        DeletionPage deletionPage = new DeletionPage();
+        Assert.assertTrue(deletionPage.isPageOpened(), "Page is not deleted");
+        deletionPage.getHeader().goToBasePage();
+        HomePage homePage = new HomePage();
+        homePage.getLeftMenu().clickItem(LeftMenuEnum.PAGES);
+        Assert.assertTrue(pagesPage.isPageDeleted(page), "Page is not deleted");
+    }
+
+
+
+
+
 
     @AfterMethod
     public void tearDown(Method method) {

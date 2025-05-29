@@ -27,7 +27,7 @@ public class AddNewPostPage {
     private static final By SAVE_DRAFT_BUTTON_LOCATOR = By.xpath("//button[contains(text(),'Save draft')]");
     private static final By PUBLISH_BUTTON_LOCATOR = By.xpath("//button[contains(text(),'Publish')]");
     private static final By POST_PUBLISH_BUTTON_LOCATOR = By.xpath("//div[@class='editor-post-publish-panel__header-publish-button']");
-    private static final By VIEW_POSTS_LOCATOR = By.xpath("//a[@href='edit.php?post_type=post']");
+    private static final By VIEW_POSTS_LOCATOR = By.xpath("//a[@href='edit.php?post_type=post'][@aria-label='View Posts']");
 
     public boolean isPageOpened() {
         WebElement pageElement = Browser.waitForElementToBeVisible(PAGE_LOCATOR);

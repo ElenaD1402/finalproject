@@ -1,5 +1,6 @@
 package org.elena.finalproject.webDriver;
 
+import io.qameta.allure.Attachment;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -131,6 +132,11 @@ public class Browser {
     public static void pressKey(Keys key) {
         Actions pressKey = new Actions(getWebDriver());
         pressKey.keyDown(String.valueOf(key)).keyUp(String.valueOf(key)).perform();
+    }
+
+    @Attachment
+    public static byte[] makeScreenshot() {
+        return ((TakesScreenshot) getWebDriver()).getScreenshotAs(OutputType.BYTES);
     }
 
     public static void close() {
