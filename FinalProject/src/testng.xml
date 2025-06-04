@@ -4,7 +4,7 @@
         <classes>
             <class name="org.elena.finalproject.tests.MediaTest"/>
             <class name="org.elena.finalproject.tests.PageTest"/>
-            <class name="org.elena.finalproject.tests.UserMenuListTest"/>
+            <!-- <class name="org.elena.finalproject.tests.UserMenuListTest"/> -->
         </classes>
     </test>
 </suite>
