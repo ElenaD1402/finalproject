@@ -2,7 +2,9 @@
     <listeners> </listeners>
     <test name="Nopackage">
         <classes>
-            <class name="org.elena.finalproject.tests.LoginTest"/>
+            <class name="org.elena.finalproject.tests.MediaTest"/>
+            <class name="org.elena.finalproject.tests.PageTest"/>
+            <class name="org.elena.finalproject.tests.UserMenuListTest"/>
         </classes>
     </test>
 </suite>

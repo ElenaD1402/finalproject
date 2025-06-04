@@ -1,5 +1,6 @@
 package org.elena.finalproject.pages.posts;
 
+import io.qameta.allure.Step;
 import org.elena.finalproject.models.Category;
 import org.elena.finalproject.pages.BasePage;
 import org.elena.finalproject.webDriver.Browser;
@@ -24,12 +25,29 @@ public class CategoriesPage extends BasePage {
         super();
     }
 
+    @Step("Checking whether 'Categories' page is opened")
     @Override
     public boolean isPageOpened() {
         WebElement pageElement = Browser.waitForElementToBeVisible(PAGE_LOCATOR);
         return pageElement != null && pageElement.isDisplayed();
     }
 
+    @Step("Adding a new category without parent")
+    public void addNewCategoryWithoutParent(Category category)  {
+        WebElement nameElement = Browser.waitForElementToBeVisible(NEW_CATEGORY_NAME_LOCATOR);
+        nameElement.clear();
+        nameElement.sendKeys(category.getName());
+        WebElement slugElement = Browser.waitForElementToBeVisible(NEW_CATEGORY_SLUG_LOCATOR);
+        slugElement.clear();
+        slugElement.sendKeys(category.getSlug());
+        WebElement descriptionElement = Browser.waitForElementToBeVisible(NEW_CATEGORY_DESCRIPTION_LOCATOR);
+        descriptionElement.clear();
+        descriptionElement.sendKeys(category.getDescription());
+        WebElement addNewCategoryButtonElement = Browser.waitForElementToBeClickable(ADD_NEW_CATEGORY_BUTTON_LOCATOR);
+        addNewCategoryButtonElement.click();
+    }
+
+    @Step("Adding a new category with parent")
     public void addNewCategoryWithParent(Category category)  {
         WebElement nameElement = Browser.waitForElementToBeVisible(NEW_CATEGORY_NAME_LOCATOR);
         nameElement.clear();
@@ -50,25 +68,13 @@ public class CategoriesPage extends BasePage {
         addNewCategoryButtonElement.click();
     }
 
-    public void addNewCategoryWithoutParent(Category category)  {
-        WebElement nameElement = Browser.waitForElementToBeVisible(NEW_CATEGORY_NAME_LOCATOR);
-        nameElement.clear();
-        nameElement.sendKeys(category.getName());
-        WebElement slugElement = Browser.waitForElementToBeVisible(NEW_CATEGORY_SLUG_LOCATOR);
-        slugElement.clear();
-        slugElement.sendKeys(category.getSlug());
-        WebElement descriptionElement = Browser.waitForElementToBeVisible(NEW_CATEGORY_DESCRIPTION_LOCATOR);
-        descriptionElement.clear();
-        descriptionElement.sendKeys(category.getDescription());
-        WebElement addNewCategoryButtonElement = Browser.waitForElementToBeClickable(ADD_NEW_CATEGORY_BUTTON_LOCATOR);
-        addNewCategoryButtonElement.click();
-    }
-
+    @Step("Checking whether the category is added")
     public boolean isCategoryAdded() {
         WebElement addedCategoryElement = Browser.waitForElementToBeVisible(CATEGORY_IS_ADDED_LOCATOR);
         return addedCategoryElement != null && addedCategoryElement.isDisplayed();
     }
 
+    @Step("Deleting the category")
     public void deleteCategory(Category category) {
         WebElement categoryElement = Browser.waitForElementToBeVisible(By.xpath("//a[contains(text(),'" + category.getName() + "')]"));
         Browser.moveToElement(categoryElement).perform();
@@ -78,6 +84,7 @@ public class CategoriesPage extends BasePage {
         Browser.waitDeleting(categoryElement);
     }
 
+    @Step("Checking whether the category is deleted")
     public boolean isCategoryDeleted(Category category) {
         WebElement deletedCategoryElement = Browser.waitForElementToBeVisible(By.xpath("//a[contains(text(),'" + category.getName() + "')]"));
         return deletedCategoryElement == null;

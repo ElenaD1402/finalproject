@@ -1,5 +1,6 @@
 package org.elena.finalproject.pages.posts;
 
+import io.qameta.allure.Step;
 import org.elena.finalproject.models.Tag;
 import org.elena.finalproject.pages.BasePage;
 import org.elena.finalproject.webDriver.Browser;
@@ -19,12 +20,14 @@ public class TagsPage extends BasePage {
         super();
     }
 
+    @Step("Checking whether 'Tags' page is opened")
     @Override
     public boolean isPageOpened() {
         WebElement pageElement = Browser.waitForElementToBeVisible(PAGE_LOCATOR);
         return pageElement != null && pageElement.isDisplayed();
     }
 
+    @Step("Adding a new tag")
     public void addNewTag(Tag tag) {
         WebElement nameElement = Browser.waitForElementToBeVisible(NEW_TAG_NAME_LOCATOR);
         nameElement.clear();
@@ -39,11 +42,13 @@ public class TagsPage extends BasePage {
         addNewTagButtonElement.click();
     }
 
+    @Step("Checking whether the tag is added")
     public boolean isTagAdded() {
         WebElement addedTagElement = Browser.waitForElementToBeVisible(TAG_IS_ADDED_LOCATOR);
         return addedTagElement != null && addedTagElement.isDisplayed();
     }
 
+    @Step("Deleting the tag")
     public void deleteTag(Tag tag) {
         WebElement tagElement = Browser.waitForElementToBeVisible(By.xpath("//a[contains(text(),'" + tag.getName() + "')]"));
         Browser.moveToElement(tagElement).perform();
@@ -53,6 +58,7 @@ public class TagsPage extends BasePage {
         Browser.waitDeleting(tagElement);
     }
 
+    @Step("Checking whether the tag is deleted")
     public boolean isTagDeleted(Tag tag) {
         WebElement deletedTagElement = Browser.waitForElementToBeVisible(By.xpath("//a[contains(text(),'" + tag.getName() + "')]"));
         return deletedTagElement == null;

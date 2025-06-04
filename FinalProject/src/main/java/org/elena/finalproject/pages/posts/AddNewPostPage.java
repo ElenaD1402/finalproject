@@ -1,5 +1,6 @@
 package org.elena.finalproject.pages.posts;
 
+import io.qameta.allure.Step;
 import org.elena.finalproject.models.Category;
 import org.elena.finalproject.models.Post;
 import org.elena.finalproject.models.Tag;
@@ -29,11 +30,13 @@ public class AddNewPostPage {
     private static final By POST_PUBLISH_BUTTON_LOCATOR = By.xpath("//div[@class='editor-post-publish-panel__header-publish-button']");
     private static final By VIEW_POSTS_LOCATOR = By.xpath("//a[@href='edit.php?post_type=post'][@aria-label='View Posts']");
 
+    @Step("Checking whether 'Add New Post' page is opened")
     public boolean isPageOpened() {
         WebElement pageElement = Browser.waitForElementToBeVisible(PAGE_LOCATOR);
         return pageElement != null && pageElement.isDisplayed();
     }
 
+    @Step("Adding a new 'Draft' post")
     public void addNewPostDraft(Post post) {
         WebElement iframeElement = Browser.waitForElementToBePresent(IFRAME_LOCATOR);
         Browser.switchToFrame(iframeElement);
@@ -49,6 +52,7 @@ public class AddNewPostPage {
         saveDraftButtonElement.click();
     }
 
+    @Step("Adding a new post without category and tag")
     public void addNewPost(Post post) {
         WebElement iframeElement = Browser.waitForElementToBePresent(IFRAME_LOCATOR);
         Browser.switchToFrame(iframeElement);
@@ -66,6 +70,7 @@ public class AddNewPostPage {
         postPublishButtonElement.click();
     }
 
+    @Step("Adding a new post with category")
     public void addNewPostWithCategory(Post post, Category category) {
         WebElement iframeElement = Browser.waitForElementToBePresent(IFRAME_LOCATOR);
         Browser.switchToFrame(iframeElement);
@@ -95,6 +100,7 @@ public class AddNewPostPage {
         postPublishButtonElement.click();
     }
 
+    @Step("Adding a new post with tag")
     public void addNewPostWithTag(Post post, Tag tag) {
         WebElement iframeElement = Browser.waitForElementToBePresent(IFRAME_LOCATOR);
         Browser.switchToFrame(iframeElement);
@@ -120,6 +126,7 @@ public class AddNewPostPage {
         postPublishButtonElement.click();
     }
 
+    @Step("Adding a new post with category and tag")
     public void addNewPostWithCategoryAndTag(Post post, Category category, Tag tag) {
         WebElement iframeElement = Browser.waitForElementToBePresent(IFRAME_LOCATOR);
         Browser.switchToFrame(iframeElement);
@@ -155,6 +162,7 @@ public class AddNewPostPage {
         postPublishButtonElement.click();
     }
 
+    @Step("Clicking 'View Posts'. Opening 'All Posts' page")
     public void goToPostsPage() {
         WebElement viewPostsElement = Browser.waitForElementToBeClickable(VIEW_POSTS_LOCATOR);
         viewPostsElement.click();

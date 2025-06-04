@@ -15,7 +15,7 @@ import java.util.Map;
 public class BrowserFactory {
 
     static {
-        System.setProperty("webdriver.chrome.driver", "c:/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
     }
 
     public static WebDriver createDriver(BrowserEnum browserEnum) {

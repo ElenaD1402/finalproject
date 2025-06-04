@@ -1,5 +1,6 @@
 package org.elena.finalproject.pages;
 
+import io.qameta.allure.Step;
 import org.elena.finalproject.elements.Header;
 import org.elena.finalproject.webDriver.Browser;
 import org.openqa.selenium.By;
@@ -15,6 +16,7 @@ public class DeletionPage {
         return header;
     }
 
+    @Step("Checking whether the page after deletion is opened")
     public boolean isPageOpened() {
         WebElement pageElement = Browser.waitForElementToBeVisible(PAGE_LOCATOR);
         return pageElement != null && pageElement.isDisplayed();

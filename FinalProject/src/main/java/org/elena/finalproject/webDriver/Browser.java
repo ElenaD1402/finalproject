@@ -12,7 +12,7 @@ import java.util.List;
 public class Browser {
 
     public static final long DEFAULT_TIME_OUT = 10L;
-    public static final int TIME_OUT_IN_SECONDS = 20;
+    public static final int TIME_OUT_IN_SECONDS = 15;
 
     private static WebDriver webDriver;
 
@@ -83,6 +83,10 @@ public class Browser {
             return null;
         }
     }
+
+//    public static void findElementInElement() {}
+
+
 
     public static Actions moveToElement(WebElement webElement) {
         Actions moveTo = new Actions(Browser.getWebDriver());

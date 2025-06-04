@@ -1,5 +1,6 @@
 package org.elena.finalproject.elements;
 
+import io.qameta.allure.Step;
 import org.elena.finalproject.webDriver.Browser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -13,7 +14,8 @@ public class Header {
     private static final By EDIT_PROFILE_LOCATOR = By.xpath("//a[(contains(text(),'Edit Profile'))]");
     private static final By LOG_OUT_LOCATOR = By.xpath("//a[(contains(text(),'Log Out'))]");
 
-    public void goToBasePage() {
+    @Step("Clicking 'Logo' in the header. Opening 'Home' page")
+    public void goToHomePage() {
         WebElement logoElement = Browser.waitForElementToBeVisible(LOGO_LOCATOR);
         Browser.moveToElement(logoElement).perform();
         Browser.waitExpanding(LOGO_HOVER_LOCATOR);
@@ -21,6 +23,7 @@ public class Header {
         logoHoverElement.click();
     }
 
+    @Step("Logging out")
     public void logOut() {
         WebElement profileMenuElement = Browser.waitForElementToBeVisible(PROFILE_MENU_LOCATOR);
         Browser.moveToElement(profileMenuElement).perform();
