@@ -35,7 +35,7 @@ public class PagesPage extends BasePage {
         return pageElement != null && pageElement.isDisplayed();
     }
 
-    @Step("User searches for the page")
+    @Step("User searches for the page with title = '{title}'")
     private void searchPage(String title) {
         WebElement searchPagesFieldElement = Browser.waitForElementToBeVisible(SEARCH_PAGES_FIELD_LOCATOR);
         searchPagesFieldElement.clear();
@@ -48,7 +48,7 @@ public class PagesPage extends BasePage {
     @Step("Checking whether the 'Draft' page is added")
     public boolean isDraftPageAdded(Page page) {
         searchPage(page.getTitle());
-        WebElement addedDraftPageElement = Browser.waitForElementToBePresent(By.xpath("//a[contains(text(),'" + page.getTitle()
+        WebElement addedDraftPageElement = Browser.waitForElementToBeVisible(By.xpath("//a[contains(text(),'" + page.getTitle()
                 + "')]/following-sibling::span[contains(text(),'Draft')]/../../..//*[contains(text(),'Last Modified')]"));
         return addedDraftPageElement != null && addedDraftPageElement.isDisplayed();
     }
@@ -56,7 +56,7 @@ public class PagesPage extends BasePage {
     @Step("Checking whether the page is added")
     public boolean isPageAdded(Page page) {
         searchPage(page.getTitle());
-        WebElement addedPageElement = Browser.waitForElementToBePresent(By.xpath("//a[contains(text(),'" + page.getTitle()
+        WebElement addedPageElement = Browser.waitForElementToBeVisible(By.xpath("//a[contains(text(),'" + page.getTitle()
                 + "')]/../../..//*[contains(text(),'Published')]"));
         return addedPageElement != null && addedPageElement.isDisplayed();
     }
@@ -64,7 +64,7 @@ public class PagesPage extends BasePage {
     @Step("User deletes a page")
     public void deletePage(Page page) {
         searchPage(page.getTitle());
-        WebElement pageElement = Browser.waitForElementToBePresent(By.xpath("//a[contains(text(),'" + page.getTitle() + "')]"));
+        WebElement pageElement = Browser.waitForElementToBeVisible(By.xpath("//a[contains(text(),'" + page.getTitle() + "')]"));
         Browser.moveToElement(pageElement).perform();
         WebElement deletePageElement = Browser.waitForElementToBeClickable(By.xpath("//a[@aria-label='Move “" + page.getTitle()
                 + "” to the Trash']"));

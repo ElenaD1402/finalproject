@@ -16,14 +16,14 @@ import java.lang.reflect.Method;
 
 public class PageTest {
 
-    private static final String pageTitle1 = DataGenerator.getRandomString(15);
-    private static final String pageBlock1 = DataGenerator.getRandomString(50);
-    private static final Page page1 = Page.builder().title(pageTitle1).block(pageBlock1).build();
-    private static final String pageTitle2 = DataGenerator.getRandomString(15);
-    private static final String pageBlock2 = DataGenerator.getRandomString(50);
-    private static final Page page2 = Page.builder().title(pageTitle2).block(pageBlock2).build();
-    private static final String pageTitle3 = DataGenerator.getRandomString(15);
-    private static final Page page3 = Page.builder().title(pageTitle3).build();
+    private static final String PAGE_TITLE_1 = DataGenerator.getRandomString(15);
+    private static final String PAGE_BLOCK_1 = DataGenerator.getRandomString(50);
+    private static final Page PAGE_1 = Page.builder().title(PAGE_TITLE_1).block(PAGE_BLOCK_1).build();
+    private static final String PAGE_TITLE_2 = DataGenerator.getRandomString(15);
+    private static final String PAGE_BLOCK_2 = DataGenerator.getRandomString(50);
+    private static final Page PAGE_2 = Page.builder().title(PAGE_TITLE_2).block(PAGE_BLOCK_2).build();
+    private static final String PAGE_TITLE_3 = DataGenerator.getRandomString(15);
+    private static final Page PAGE_3 = Page.builder().title(PAGE_TITLE_3).build();
 
     private final LoginPage loginPage = new LoginPage();
     private final DashboardPage dashboardPage = new DashboardPage();
@@ -54,10 +54,10 @@ public class PageTest {
     public void testDraftPageCanBeCreated() {
         addNewPagePage.openAddNewPagePage();
         Assert.assertTrue(addNewPagePage.isPageOpened(), "'Add New Page' page is not opened");
-        addNewPagePage.addNewPageDraft(page1);
+        addNewPagePage.addNewPageDraft(PAGE_1);
         addNewPagePage.goToPagesPage();
         Assert.assertTrue(pagesPage.isPageOpened(), "'Pages' page is not opened");
-        Assert.assertTrue(pagesPage.isDraftPageAdded(page1), "'Draft' page is not added");
+        Assert.assertTrue(pagesPage.isDraftPageAdded(PAGE_1), "'Draft' page is not added");
         Browser.makeScreenshot();
     }
 
@@ -65,10 +65,10 @@ public class PageTest {
     public void testPageWithoutPatternCanBeCreated() {
         addNewPagePage.openAddNewPagePage();
         Assert.assertTrue(addNewPagePage.isPageOpened(), "'Add New Page' page is not opened");
-        addNewPagePage.addNewPageWithoutPattern(page2);
+        addNewPagePage.addNewPageWithoutPattern(PAGE_2);
         addNewPagePage.goToPagesPage();
         Assert.assertTrue(pagesPage.isPageOpened(), "'Pages' page is not opened");
-        Assert.assertTrue(pagesPage.isPageAdded(page2), "Page is not added");
+        Assert.assertTrue(pagesPage.isPageAdded(PAGE_2), "Page is not added");
         Browser.makeScreenshot();
     }
 
@@ -76,19 +76,19 @@ public class PageTest {
     public void testPageWithPatternCanBeCreated() {
         addNewPagePage.openAddNewPagePage();
         Assert.assertTrue(addNewPagePage.isPageOpened(), "'Add New Page' page is not opened");
-        addNewPagePage.addNewPageWithAboutPattern(page3);
+        addNewPagePage.addNewPageWithAboutPattern(PAGE_3);
         addNewPagePage.goToPagesPage();
         Assert.assertTrue(pagesPage.isPageOpened(), "'Pages' page is not opened");
-        Assert.assertTrue(pagesPage.isPageAdded(page3), "Page is not added");
+        Assert.assertTrue(pagesPage.isPageAdded(PAGE_3), "Page is not added");
         Browser.makeScreenshot();
     }
 
     @DataProvider(name = "paramsPagesToBeDeleted")
     public static Object[][] paramsPagesToBeDeleted() {
         return new Object[][]{
-                {page1, pageTitle1},
-                {page2, pageTitle2},
-                {page3, pageTitle3},
+                {PAGE_1, PAGE_TITLE_1},
+                {PAGE_2, PAGE_TITLE_2},
+                {PAGE_3, PAGE_TITLE_3}
         };
     }
 
