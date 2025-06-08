@@ -4,6 +4,7 @@
         <classes>
             <class name="org.elena.finalproject.tests.MediaTest"/>
             <class name="org.elena.finalproject.tests.PageTest"/>
+            <class name="org.elena.finalproject.tests.PostTest"/>
             <class name="org.elena.finalproject.tests.TagTest"/>
             <class name="org.elena.finalproject.tests.CategoryTest"/>
             <!--  <class name="org.elena.finalproject.tests.UserMenuListTest"/> -->

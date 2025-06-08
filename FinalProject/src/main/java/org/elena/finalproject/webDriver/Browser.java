@@ -7,7 +7,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
 
 public class Browser {
 
@@ -60,18 +59,6 @@ public class Browser {
         }
     }
 
-    public static List<WebElement> waitForElementsToBeVisible(By locator) {
-        try {
-            WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(TIME_OUT_IN_SECONDS));
-            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-            List<WebElement> listElement = getWebDriver().findElements(locator);
-            return listElement;
-        } catch (NotFoundException ex) {
-            System.out.println(ex.getMessage());
-            return null;
-        }
-    }
-
     public static WebElement waitForElementToBePresent(By locator) {
         try {
             WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(TIME_OUT_IN_SECONDS));
@@ -85,7 +72,6 @@ public class Browser {
     }
 
 //    public static void findElementInElement() {}
-
 
 
     public static Actions moveToElement(WebElement webElement) {
