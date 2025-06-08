@@ -10,8 +10,8 @@ import java.time.Duration;
 
 public class Browser {
 
-    public static final long DEFAULT_TIME_OUT = 10L;
-    public static final int TIME_OUT_IN_SECONDS = 15;
+    public static final long DEFAULT_TIME_OUT = 30L;
+    public static final int TIME_OUT_IN_SECONDS = 30;
 
     private static WebDriver webDriver;
 
