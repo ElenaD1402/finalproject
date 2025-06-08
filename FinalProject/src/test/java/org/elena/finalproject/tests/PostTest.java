@@ -1,7 +1,6 @@
 package org.elena.finalproject.tests;
 
 import io.qameta.allure.Flaky;
-import org.elena.finalproject.credentials.UserEnum;
 import org.elena.finalproject.models.Category;
 import org.elena.finalproject.models.Post;
 import org.elena.finalproject.models.Tag;
@@ -53,9 +52,6 @@ public class PostTest {
     @BeforeClass
     public void setUp() {
         loginPage.openLoginPage();
-        Browser.makeScreenshot();
-        Assert.assertTrue(loginPage.isPageOpened(), "'Login' page is not opened");
-        loginPage.logIn(UserEnum.ADMINISTRATOR.getUsername(), UserEnum.ADMINISTRATOR.getPassword());
         Assert.assertTrue(dashboardPage.isPageOpened(), "'Dashboard' page is not opened");
     }
 
