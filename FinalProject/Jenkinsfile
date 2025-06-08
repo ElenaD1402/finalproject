@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    tools {
+        // Install the Maven version configured as "maven3" and add it to the path.
+        maven "maven3"
+    }
+
+    parameters {
+        choice(name: 'browser', choices: ['CHROME', 'FIREFOX', 'REMOTE_CHROME', 'REMOTE_FIREFOX'], description: 'Choosing a browser')
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                // Get some code from a GitHub repository.
+                git branch: 'finalproject', url: 'https://github.com/ElenaD1402/finalproject.git'
+
+                // Run Maven on a Windows agent.
+                bat "mvn -f FinalProject clean test -Dbrowser=${params.browser}"
+            }
+
+            post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results.
+                always {
+                    allure includeProperties: false, jdk: '', results: [[path: 'FinalProject/target/allure-results']]
+                }
+            }
+        }
+    }
+}
