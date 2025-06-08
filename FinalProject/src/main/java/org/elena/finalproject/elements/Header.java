@@ -13,6 +13,7 @@ public class Header {
     private static final By PROFILE_MENU_HOVER_LOCATOR = By.xpath("//li[@id='wp-admin-bar-my-account'][@class='menupop with-avatar hover']");
     private static final By EDIT_PROFILE_LOCATOR = By.xpath("//a[(contains(text(),'Edit Profile'))]");
     private static final By LOG_OUT_LOCATOR = By.xpath("//a[(contains(text(),'Log Out'))]");
+    private static final By LOGGED_OUT_LOCATOR = By.xpath("//*[contains(text(),'You are now logged out.')]");
 
     @Step("Clicking 'Logo' in the header. Opening 'Home' page")
     public void goToHomePage() {
@@ -30,5 +31,6 @@ public class Header {
         Browser.waitExpanding(PROFILE_MENU_HOVER_LOCATOR);
         WebElement logOutElement = Browser.waitForElementToBeClickable(LOG_OUT_LOCATOR);
         Browser.moveToElement(logOutElement).click().perform();
+        Browser.waitForElementToBeVisible(LOGGED_OUT_LOCATOR);
     }
 }

@@ -1,5 +1,6 @@
 package org.elena.finalproject.tests;
 
+import io.qameta.allure.Flaky;
 import org.elena.finalproject.credentials.UserEnum;
 import org.elena.finalproject.models.Category;
 import org.elena.finalproject.models.Post;
@@ -104,6 +105,7 @@ public class PostTest {
     }
 
     @Test(priority = 1)
+    @Flaky
     public void testPostWithTagCanBeCreated() {
         addNewPostPage.openAddNewPostPage();
         Assert.assertTrue(addNewPostPage.isPageOpened(), "'Add New Post' page is not opened");
