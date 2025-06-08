@@ -15,6 +15,9 @@ public class MediaPage extends BasePage {
     private static final By TABLE_VIEW_LOCATOR = By.id("view-switch-list");
     private static final By UPLOADED_FILE_LOCATOR = By.xpath(String.format("//*[contains(@aria-label,'“%s” (Edit)')]", PATH));
     private static final By DELETE_PERMANENTLY_LOCATOR = By.xpath(String.format("//p[@class='filename'][text()[contains(.,'%s')]]/..//span[@class='delete']/a[contains(text(),'Delete Permanently')]", PATH));
+    private static final By SEARCH_MEDIA_FIELD_LOCATOR = By.id("media-search-input");
+    private static final By SEARCH_MEDIA_BUTTON_LOCATOR = By.id("search-submit");
+    private static final By NO_MEDIA_FOUND_LOCATOR = By.xpath("//*[contains(text(),'No media files found.')]");
 
     private Logger logger = Logger.getLogger(this.getClass());
 
@@ -42,6 +45,16 @@ public class MediaPage extends BasePage {
         logger.info("Choosing a table view");
     }
 
+    @Step("User searches for the media file")
+    private void searchMedia() {
+        WebElement searchMediaFieldElement = Browser.waitForElementToBeVisible(SEARCH_MEDIA_FIELD_LOCATOR);
+        searchMediaFieldElement.clear();
+        searchMediaFieldElement.sendKeys(PATH);
+        WebElement searchMediaButtonElement = Browser.waitForElementToBeClickable(SEARCH_MEDIA_BUTTON_LOCATOR);
+        searchMediaButtonElement.click();
+        logger.info("Searching for the the media file");
+    }
+
     @Step("Checking whether the media file is uploaded")
     public boolean isFileUploaded() {
         WebElement uploadedFileElement = Browser.waitForElementToBeClickable(UPLOADED_FILE_LOCATOR);
@@ -50,6 +63,7 @@ public class MediaPage extends BasePage {
 
     @Step("User deletes a media file")
     public void deleteMediaFile() {
+        searchMedia();
         WebElement deletePermanentlyElement = Browser.waitForElementToBePresent(DELETE_PERMANENTLY_LOCATOR);
         Browser.click(deletePermanentlyElement);
         Browser.acceptAlert();
@@ -58,7 +72,8 @@ public class MediaPage extends BasePage {
 
     @Step("Checking whether the media file is deleted")
     public boolean isFileDeleted() {
-        WebElement deletedFileElement = Browser.waitForElementToBeVisible(UPLOADED_FILE_LOCATOR);
-        return deletedFileElement == null;
+        searchMedia();
+        WebElement noMediaFoundElement = Browser.waitForElementToBeVisible(NO_MEDIA_FOUND_LOCATOR);
+        return noMediaFoundElement != null && noMediaFoundElement.isDisplayed();
     }
 }
