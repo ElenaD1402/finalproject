@@ -18,7 +18,7 @@ public class AddNewPostPage {
     private static final By ADD_TITLE_LOCATOR = By.xpath("//h1[contains(@class,'wp-block-post-title')]");
     private static final By TEXT_BLOCK_LOCATOR = By.xpath("//div[contains(@class,'wp-block-post-content')]/p");
     private static final By ADD_NEW_CATEGORY_LOCATOR = By.xpath("//button[contains(text(),'Add New Category')]");
-    private static final By NEW_CATEGORY_NAME_FIELD_LOCATOR = By.xpath("//input[contains(@id,'inspector-text-control-')]");
+    private static final By NEW_CATEGORY_NAME_FIELD_LOCATOR = By.xpath("//*[contains(text(),'New Category Name')]/following-sibling::input[contains(@id,'inspector-text-control-')]");
     private static final By ADD_NEW_CATEGORY_BUTTON_LOCATOR = By.xpath("//button[contains(text(),'Add New Category')][@type='submit']");
     private static final By ADD_NEW_TAG_FIELD_LOCATOR = By.xpath("//input[contains(@id,'components-form-token-input-')]");
     private static final By TAG_FIELD_REFRESHED_LOCATOR = By.xpath("//div[contains(@class,'components-form-token-field__input-container')]");
