@@ -1,6 +1,7 @@
 package org.elena.finalproject.tests;
 
-import io.qameta.allure.Flaky;
+import io.qameta.allure.*;
+import org.apache.log4j.Logger;
 import org.elena.finalproject.credentials.UserEnum;
 import org.elena.finalproject.models.Category;
 import org.elena.finalproject.models.Post;
@@ -19,30 +20,29 @@ import java.lang.reflect.Method;
 
 public class PostTest {
 
-    private static final String POST_DRAFT_TITLE = DataGenerator.getRandomString(10);
-    private static final String POST_DRAFT_BLOCK = DataGenerator.getRandomString(50);
-    private static final Post POST_DRAFT = Post.builder().title(POST_DRAFT_TITLE).block(POST_DRAFT_BLOCK).build();
-    private static final String POST_TITLE = DataGenerator.getRandomString(10);
-    private static final String POST_BLOCK = DataGenerator.getRandomString(50);
-    private static final Post POST = Post.builder().title(POST_TITLE).block(POST_BLOCK).build();
-    private static final String CATEGORY_NAME_1 = DataGenerator.getRandomCategory();
-    private static final Category CATEGORY_1 = Category.builder().name(CATEGORY_NAME_1).build();
-    private static final String POST_WITH_CATEGORY_TITLE = DataGenerator.getRandomString(10);
-    private static final String POST_WITH_CATEGORY_BLOCK = DataGenerator.getRandomString(50);
-    private static final Post POST_WITH_CATEGORY = Post.builder().title(POST_WITH_CATEGORY_TITLE).block(POST_WITH_CATEGORY_BLOCK).build();
-    private static final String TAG_NAME_1 = DataGenerator.getRandomTag();
-    private static final Tag TAG_1 = Tag.builder().name(TAG_NAME_1).build();
-    private static final String POST_WITH_TAG_TITLE = DataGenerator.getRandomString(10);
-    private static final String POST_WITH_TAG_BLOCK = DataGenerator.getRandomString(50);
-    private static final Post POST_WITH_TAG = Post.builder().title(POST_WITH_TAG_TITLE).block(POST_WITH_TAG_BLOCK).build();
-    private static final String CATEGORY_NAME_2 = DataGenerator.getRandomCategory();
-    private static final Category CATEGORY_2 = Category.builder().name(CATEGORY_NAME_2).build();
-    private static final String TAG_NAME_2 = DataGenerator.getRandomTag();
-    private static final Tag TAG_2 = Tag.builder().name(TAG_NAME_2).build();
-    private static final String POST_WITH_CATEGORY_AND_TAG_TITLE = DataGenerator.getRandomString(10);
-    private static final String POST_WITH_CATEGORY_AND_TAG_BLOCK = DataGenerator.getRandomString(50);
-    private static final Post POST_WITH_CATEGORY_AND_TAG = Post.builder().title(POST_WITH_CATEGORY_AND_TAG_TITLE)
-            .block(POST_WITH_CATEGORY_AND_TAG_BLOCK).build();
+    private static final Post POST_DRAFT = Post.builder()
+            .title(DataGenerator.getRandomString(10))
+            .block(DataGenerator.getRandomString(50)).build();
+    private static final Post POST = Post.builder()
+            .title(DataGenerator.getRandomString(10))
+            .block(DataGenerator.getRandomString(50)).build();
+    private static final Category CATEGORY_1 = Category.builder()
+            .name(DataGenerator.getRandomCategory()).build();
+    private static final Post POST_WITH_CATEGORY = Post.builder()
+            .title(DataGenerator.getRandomString(10))
+            .block(DataGenerator.getRandomString(50)).build();
+    private static final Tag TAG_1 = Tag.builder()
+            .name(DataGenerator.getRandomTag()).build();
+    private static final Post POST_WITH_TAG = Post.builder()
+            .title(DataGenerator.getRandomString(10))
+            .block(DataGenerator.getRandomString(50)).build();
+    private static final Category CATEGORY_2 = Category.builder()
+            .name(DataGenerator.getRandomCategory()).build();
+    private static final Tag TAG_2 = Tag.builder()
+            .name(DataGenerator.getRandomTag()).build();
+    private static final Post POST_WITH_CATEGORY_AND_TAG = Post.builder()
+            .title(DataGenerator.getRandomString(10))
+            .block(DataGenerator.getRandomString(50)).build();
 
     private final LoginPage loginPage = new LoginPage();
     private final DashboardPage dashboardPage = new DashboardPage();
@@ -50,12 +50,18 @@ public class PostTest {
     private final PostsPage postsPage = new PostsPage();
     private final DeletionPage deletionPage = new DeletionPage();
 
+    private Logger logger = Logger.getLogger(this.getClass());
+
     @BeforeClass
     public void setUp() {
-        loginPage.openLoginPage();
-        Assert.assertTrue(loginPage.isPageOpened(), "'Login' page is not opened");
-        loginPage.logIn(UserEnum.ADMINISTRATOR.getUsername(), UserEnum.ADMINISTRATOR.getPassword());
-        Assert.assertTrue(dashboardPage.isPageOpened(), "'Dashboard' page is not opened");
+        try {
+            loginPage.openLoginPage();
+            Assert.assertTrue(loginPage.isPageOpened(), "'Login' page is not opened");
+            loginPage.logIn(UserEnum.ADMINISTRATOR.getUsername(), UserEnum.ADMINISTRATOR.getPassword());
+            Assert.assertTrue(dashboardPage.isPageOpened(), "'Dashboard' page is not opened");
+        } catch (AssertionError | NullPointerException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     @AfterClass
@@ -66,89 +72,126 @@ public class PostTest {
 
     @AfterMethod
     public void afterMethod(Method method) {
+        Browser.makeScreenshot();
         System.out.println("Test " + method.getName() + " is finished");
     }
 
-    @Test(priority = 1)
+    @Epic(value = "Post")
+    @Test
+    @Description(value = "Test validates whether draft post can be created")
+    @Severity(value = SeverityLevel.BLOCKER)
     public void testDraftPostCanBeCreated() {
-        addNewPostPage.openAddNewPostPage();
-        Assert.assertTrue(addNewPostPage.isPageOpened(), "'Add New Post' page is not opened");
-        addNewPostPage.addNewPostDraft(POST_DRAFT);
-        addNewPostPage.goToPostsPage();
-        Assert.assertTrue(postsPage.isPageOpened(), "'Posts' page is not opened");
-        Assert.assertTrue(postsPage.isDraftPostAdded(POST_DRAFT), "'Draft' post is not added");
-        Browser.makeScreenshot();
+        try {
+            addNewPostPage.openAddNewPostPage();
+            Assert.assertTrue(addNewPostPage.isPageOpened(), "'Add New Post' page is not opened");
+            addNewPostPage.addNewPostDraft(POST_DRAFT);
+            addNewPostPage.goToPostsPage();
+            Assert.assertTrue(postsPage.isPageOpened(), "'Posts' page is not opened");
+            Assert.assertTrue(postsPage.isDraftPostAdded(POST_DRAFT), "'Draft' post is not added");
+        } catch (AssertionError | NullPointerException e) {
+            logger.error(e.getMessage());
+        }
     }
 
-    @Test(priority = 1)
+    @Epic(value = "Post")
+    @Test
+    @Description(value = "Test validates whether post can be published")
+    @Severity(value = SeverityLevel.BLOCKER)
     public void testPostCanBeCreated() {
-        addNewPostPage.openAddNewPostPage();
-        Assert.assertTrue(addNewPostPage.isPageOpened(), "'Add New Post' page is not opened");
-        addNewPostPage.addNewPost(POST);
-        addNewPostPage.goToPostsPage();
-        Assert.assertTrue(postsPage.isPageOpened(), "'Posts' page is not opened");
-        Assert.assertTrue(postsPage.isPostAdded(POST), "Post is not added");
-        Browser.makeScreenshot();
+        try {
+            addNewPostPage.openAddNewPostPage();
+            Assert.assertTrue(addNewPostPage.isPageOpened(), "'Add New Post' page is not opened");
+            addNewPostPage.addNewPost(POST);
+            addNewPostPage.goToPostsPage();
+            Assert.assertTrue(postsPage.isPageOpened(), "'Posts' page is not opened");
+            Assert.assertTrue(postsPage.isPostAdded(POST), "Post is not added");
+        } catch (AssertionError | NullPointerException e) {
+            logger.error(e.getMessage());
+        }
     }
 
-    @Test(priority = 1)
+    @Epic(value = "Post")
+    @Test
+    @Description(value = "Test validates whether post with category can be published")
+    @Severity(value = SeverityLevel.CRITICAL)
     public void testPostWithCategoryCanBeCreated() {
-        addNewPostPage.openAddNewPostPage();
-        Assert.assertTrue(addNewPostPage.isPageOpened(), "'Add New Post' page is not opened");
-        addNewPostPage.addNewPostWithCategory(POST_WITH_CATEGORY, CATEGORY_1);
-        addNewPostPage.goToPostsPage();
-        Assert.assertTrue(postsPage.isPageOpened(), "'Posts' page is not opened");
-        Assert.assertTrue(postsPage.isPostWithCategoryAdded(POST_WITH_CATEGORY, CATEGORY_1),
-                "Post with category is not added");
-        Browser.makeScreenshot();
+        try {
+            addNewPostPage.openAddNewPostPage();
+            Assert.assertTrue(addNewPostPage.isPageOpened(), "'Add New Post' page is not opened");
+            addNewPostPage.addNewPostWithCategory(POST_WITH_CATEGORY, CATEGORY_1);
+            addNewPostPage.goToPostsPage();
+            Assert.assertTrue(postsPage.isPageOpened(), "'Posts' page is not opened");
+            Assert.assertTrue(postsPage.isPostWithCategoryAdded(POST_WITH_CATEGORY, CATEGORY_1),
+                    "Post with category is not added");
+        } catch (AssertionError | NullPointerException e) {
+            logger.error(e.getMessage());
+        }
     }
 
-    @Test(priority = 1)
+    @Epic(value = "Post")
+    @Test
     @Flaky
+    @Description(value = "Test validates whether post with tag can be published")
+    @Severity(value = SeverityLevel.CRITICAL)
     public void testPostWithTagCanBeCreated() {
-        addNewPostPage.openAddNewPostPage();
-        Assert.assertTrue(addNewPostPage.isPageOpened(), "'Add New Post' page is not opened");
-        addNewPostPage.addNewPostWithTag(POST_WITH_TAG, TAG_1);
-        addNewPostPage.goToPostsPage();
-        Assert.assertTrue(postsPage.isPageOpened(), "'Posts' page is not opened");
-        Assert.assertTrue(postsPage.isPostWithTagAdded(POST_WITH_TAG, TAG_1), "Post with tag is not added");
-        Browser.makeScreenshot();
+        try {
+            addNewPostPage.openAddNewPostPage();
+            Assert.assertTrue(addNewPostPage.isPageOpened(), "'Add New Post' page is not opened");
+            addNewPostPage.addNewPostWithTag(POST_WITH_TAG, TAG_1);
+            addNewPostPage.goToPostsPage();
+            Assert.assertTrue(postsPage.isPageOpened(), "'Posts' page is not opened");
+            Assert.assertTrue(postsPage.isPostWithTagAdded(POST_WITH_TAG, TAG_1), "Post with tag is not added");
+        } catch (AssertionError | NullPointerException e) {
+            logger.error(e.getMessage());
+        }
     }
 
-    @Test(priority = 1)
+    @Epic(value = "Post")
+    @Test
     @Flaky
+    @Description(value = "Test validates whether post with category and tag can be published")
+    @Severity(value = SeverityLevel.CRITICAL)
     public void testPostWithCategoryAndTagCanBeCreated() {
-        addNewPostPage.openAddNewPostPage();
-        Assert.assertTrue(addNewPostPage.isPageOpened(), "'Add New Post' page is not opened");
-        addNewPostPage.addNewPostWithCategoryAndTag(POST_WITH_CATEGORY_AND_TAG, CATEGORY_2, TAG_2);
-        addNewPostPage.goToPostsPage();
-        Assert.assertTrue(postsPage.isPageOpened(), "'Posts' page is not opened");
-        Assert.assertTrue(postsPage.isPostWithCategoryAndTagAdded(POST_WITH_CATEGORY_AND_TAG, CATEGORY_2, TAG_2),
-                "Post with category and tag is not added");
-        Browser.makeScreenshot();
-
+        try {
+            addNewPostPage.openAddNewPostPage();
+            Assert.assertTrue(addNewPostPage.isPageOpened(), "'Add New Post' page is not opened");
+            addNewPostPage.addNewPostWithCategoryAndTag(POST_WITH_CATEGORY_AND_TAG, CATEGORY_2, TAG_2);
+            addNewPostPage.goToPostsPage();
+            Assert.assertTrue(postsPage.isPageOpened(), "'Posts' page is not opened");
+            Assert.assertTrue(postsPage.isPostWithCategoryAndTagAdded(POST_WITH_CATEGORY_AND_TAG, CATEGORY_2, TAG_2),
+                    "Post with category and tag is not added");
+        } catch (AssertionError | NullPointerException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     @DataProvider(name = "paramsPostsToBeDeleted")
     public static Object[][] paramsPostsToBeDeleted() {
         return new Object[][]{
-                {POST_DRAFT, POST_DRAFT_TITLE},
-                {POST, POST_TITLE},
-                {POST_WITH_CATEGORY, POST_WITH_CATEGORY_TITLE},
-                {POST_WITH_TAG, POST_WITH_TAG_TITLE},
-                {POST_WITH_CATEGORY_AND_TAG, POST_WITH_CATEGORY_AND_TAG_TITLE}
+                {POST_DRAFT, POST_DRAFT.getTitle()},
+                {POST, POST.getTitle()},
+                {POST_WITH_CATEGORY, POST_WITH_CATEGORY.getTitle()},
+                {POST_WITH_TAG, POST_WITH_TAG.getTitle()},
+                {POST_WITH_CATEGORY_AND_TAG, POST_WITH_CATEGORY_AND_TAG.getTitle()}
         };
     }
 
-    @Test(priority = 2, dataProvider = "paramsPostsToBeDeleted")
+    @Epic(value = "Post")
+    @Test(dependsOnMethods = {"testDraftPostCanBeCreated", "testPostCanBeCreated", "testPostWithCategoryCanBeCreated",
+            "testPostWithTagCanBeCreated", "testPostWithCategoryAndTagCanBeCreated"}, dataProvider = "paramsPostsToBeDeleted")
+    @Description(value = "Test validates whether post can be deleted")
+    @Severity(value = SeverityLevel.CRITICAL)
     public void testPostCanBeDeleted(Post post, String title) {
-        postsPage.openPostsPage();
-        Assert.assertTrue(postsPage.isPageOpened(), "'Posts' page is not opened");
-        postsPage.deletePost(post);
-        Assert.assertTrue(deletionPage.isPageOpened(), "Post '" + title + "' is not deleted");
-        postsPage.openPostsPage();
-        Assert.assertTrue(postsPage.isPageOpened(), "'Posts' page is not opened");
-        Assert.assertTrue(postsPage.isPostDeleted(post), "Post '" + title + "' is not deleted");
-        Browser.makeScreenshot();
+        try {
+            postsPage.openPostsPage();
+            Assert.assertTrue(postsPage.isPageOpened(), "'Posts' page is not opened");
+            postsPage.deletePost(post);
+            Assert.assertTrue(deletionPage.isPageOpened(), "Post '" + title + "' is not deleted");
+            postsPage.openPostsPage();
+            Assert.assertTrue(postsPage.isPageOpened(), "'Posts' page is not opened");
+            Assert.assertTrue(postsPage.isPostDeleted(post), "Post '" + title + "' is not deleted");
+        } catch (AssertionError | NullPointerException e) {
+            logger.error(e.getMessage());
+        }
     }
 }

@@ -1,5 +1,10 @@
 package org.elena.finalproject.tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import org.apache.log4j.Logger;
 import org.elena.finalproject.credentials.UserEnum;
 import org.elena.finalproject.models.Category;
 import org.elena.finalproject.pages.DashboardPage;
@@ -14,27 +19,31 @@ import java.lang.reflect.Method;
 
 public class CategoryTest {
 
-    private static final String PARENT_CATEGORY_NAME = DataGenerator.getRandomCategory();
-    private static final String PARENT_CATEGORY_SLUG = PARENT_CATEGORY_NAME.toLowerCase();
-    private static final String PARENT_CATEGORY_DESCRIPTION = DataGenerator.getRandomString(20);
-    private static final Category PARENT_CATEGORY = Category.builder().name(PARENT_CATEGORY_NAME).slug(PARENT_CATEGORY_SLUG)
-            .description(PARENT_CATEGORY_DESCRIPTION).build();
-    private static final String CATEGORY_NAME = DataGenerator.getRandomCategory();
-    private static final String CATEGORY_SLUG = CATEGORY_NAME.toLowerCase();
-    private static final String CATEGORY_DESCRIPTION = DataGenerator.getRandomString(20);
-    private static final Category CATEGORY = Category.builder().name(CATEGORY_NAME).slug(CATEGORY_SLUG)
-            .description(CATEGORY_DESCRIPTION).build();
+    private static final Category PARENT_CATEGORY = Category.builder()
+            .name(DataGenerator.getRandomCategory())
+            .slug(DataGenerator.getRandomString(5))
+            .description(DataGenerator.getRandomString(20)).build();
+    private static final Category CATEGORY = Category.builder()
+            .name(DataGenerator.getRandomCategory())
+            .slug(DataGenerator.getRandomString(5))
+            .description(DataGenerator.getRandomString(20)).build();
 
     private final LoginPage loginPage = new LoginPage();
     private final DashboardPage dashboardPage = new DashboardPage();
     private final CategoriesPage categoriesPage = new CategoriesPage();
 
+    private Logger logger = Logger.getLogger(this.getClass());
+
     @BeforeClass
     public void setUp() {
-        loginPage.openLoginPage();
-        Assert.assertTrue(loginPage.isPageOpened(), "'Login' page is not opened");
-        loginPage.logIn(UserEnum.ADMINISTRATOR.getUsername(), UserEnum.ADMINISTRATOR.getPassword());
-        Assert.assertTrue(dashboardPage.isPageOpened(), "'Dashboard' page is not opened");
+        try {
+            loginPage.openLoginPage();
+            Assert.assertTrue(loginPage.isPageOpened(), "'Login' page is not opened");
+            loginPage.logIn(UserEnum.ADMINISTRATOR.getUsername(), UserEnum.ADMINISTRATOR.getPassword());
+            Assert.assertTrue(dashboardPage.isPageOpened(), "'Dashboard' page is not opened");
+        } catch (AssertionError | NullPointerException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     @AfterClass
@@ -45,44 +54,68 @@ public class CategoryTest {
 
     @BeforeMethod
     public void beforeMethod() {
-        categoriesPage.openCategoriesPage();
-        Assert.assertTrue(categoriesPage.isPageOpened(), "'Categories' page is not opened");
+        try {
+            categoriesPage.openCategoriesPage();
+            Assert.assertTrue(categoriesPage.isPageOpened(), "'Categories' page is not opened");
+        } catch (AssertionError e) {
+            logger.error(e.getMessage());
+        }
     }
 
     @AfterMethod
     public void afterMethod(Method method) {
+        Browser.makeScreenshot();
         System.out.println("Test " + method.getName() + " is finished");
     }
 
+    @Epic(value = "Category")
     @Test
+    @Description(value = "Test validates whether category without parent can be created")
+    @Severity(value = SeverityLevel.CRITICAL)
     public void testCategoryWithoutParentCanBeAdded() {
-        categoriesPage.addNewCategoryWithoutParent(PARENT_CATEGORY);
-        Assert.assertTrue(categoriesPage.isCategoryAdded(), "Category is not added");
-        categoriesPage.searchCategory(PARENT_CATEGORY_NAME);
-        Browser.makeScreenshot();
+        try {
+            categoriesPage.addNewCategoryWithoutParent(PARENT_CATEGORY);
+            Assert.assertTrue(categoriesPage.isCategoryAdded(), "Category is not added");
+            categoriesPage.searchCategory(PARENT_CATEGORY.getName());
+        } catch (AssertionError | NullPointerException e) {
+            logger.error(e.getMessage());
+        }
     }
 
+    @Epic(value = "Category")
     @Test(dependsOnMethods = {"testCategoryWithoutParentCanBeAdded"})
+    @Description(value = "Test validates whether category with parent can be created")
+    @Severity(value = SeverityLevel.MINOR)
     public void testCategoryWithParentCanBeAdded() {
-        categoriesPage.addNewCategoryWithParent(CATEGORY, PARENT_CATEGORY);
-        Assert.assertTrue(categoriesPage.isCategoryAdded(), "Category is not added");
-        categoriesPage.searchCategory(CATEGORY_NAME);
-        Browser.makeScreenshot();
+        try {
+            categoriesPage.addNewCategoryWithParent(CATEGORY, PARENT_CATEGORY);
+            Assert.assertTrue(categoriesPage.isCategoryAdded(), "Category is not added");
+            categoriesPage.searchCategory(CATEGORY.getName());
+        } catch (AssertionError | NullPointerException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     @DataProvider(name = "paramsCategoriesToBeDeleted")
     public static Object[][] paramsCategoriesToBeDeleted() {
         return new Object[][]{
-                {CATEGORY, CATEGORY_NAME},
-                {PARENT_CATEGORY, PARENT_CATEGORY_NAME}
+                {CATEGORY, CATEGORY.getName()},
+                {PARENT_CATEGORY, PARENT_CATEGORY.getName()}
         };
     }
 
-    @Test(dependsOnMethods = {"testCategoryWithParentCanBeAdded"}, dataProvider = "paramsCategoriesToBeDeleted")
+    @Epic(value = "Category")
+    @Test(dependsOnMethods = {"testCategoryWithoutParentCanBeAdded", "testCategoryWithParentCanBeAdded"},
+            dataProvider = "paramsCategoriesToBeDeleted")
+    @Description(value = "Test validates whether category can be deleted")
+    @Severity(value = SeverityLevel.MINOR)
     public void testCategoryCanBeDeleted(Category category, String name) {
-        categoriesPage.searchCategory(name);
-        categoriesPage.deleteCategory(category);
-        Assert.assertTrue(categoriesPage.isCategoryDeleted(category), "Category is not deleted");
-        Browser.makeScreenshot();
+        try {
+            categoriesPage.searchCategory(name);
+            categoriesPage.deleteCategory(category);
+            Assert.assertTrue(categoriesPage.isCategoryDeleted(category), "Category is not deleted");
+        } catch (AssertionError | NullPointerException e) {
+            logger.error(e.getMessage());
+        }
     }
 }

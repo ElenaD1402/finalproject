@@ -1,19 +1,23 @@
 package org.elena.finalproject.webDriver;
 
 import io.qameta.allure.Attachment;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class Browser {
 
-    public static final long DEFAULT_TIME_OUT = 30L;
-    public static final int TIME_OUT_IN_SECONDS = 30;
+    public static final long DEFAULT_TIME_OUT = 10L;
+    public static final int TIME_OUT_IN_SECONDS = 10;
 
     private static WebDriver webDriver;
+
+    private static Logger logger = Logger.getLogger(Browser.class);
 
     private Browser() {
     }
@@ -25,11 +29,11 @@ public class Browser {
         return webDriver;
     }
 
-    public static JavascriptExecutor getJavascriptExecutor() {
+    private static JavascriptExecutor getJavascriptExecutor() {
         return (JavascriptExecutor) getWebDriver();
     }
 
-    public static void initDriver() {
+    private static void initDriver() {
         webDriver = BrowserFactory.createDriver(Configuration.getBrowserEnum());
         webDriver.manage().window().maximize();
         webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(DEFAULT_TIME_OUT));
@@ -43,6 +47,7 @@ public class Browser {
             return element;
         } catch (NotFoundException | TimeoutException ex) {
             System.out.println(ex.getMessage());
+            logger.error(ex.getMessage());
             return null;
         }
     }
@@ -53,8 +58,22 @@ public class Browser {
             wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
             WebElement element = getWebDriver().findElement(locator);
             return element;
-        } catch (TimeoutException ex) {
+        } catch (NotFoundException | TimeoutException ex) {
             System.out.println(ex.getMessage());
+            logger.error(ex.getMessage());
+            return null;
+        }
+    }
+
+    public static List<WebElement> waitForElementsToBeVisible(By locator) {
+        try {
+            WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(TIME_OUT_IN_SECONDS));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+            List<WebElement> elements = getWebDriver().findElements(locator);
+            return elements;
+        } catch (NotFoundException | TimeoutException ex) {
+            System.out.println(ex.getMessage());
+            logger.error(ex.getMessage());
             return null;
         }
     }
@@ -65,14 +84,12 @@ public class Browser {
             wait.until(ExpectedConditions.presenceOfElementLocated(locator));
             WebElement element = getWebDriver().findElement(locator);
             return element;
-        } catch (NotFoundException ex) {
+        } catch (NotFoundException | TimeoutException ex) {
             System.out.println(ex.getMessage());
+            logger.error(ex.getMessage());
             return null;
         }
     }
-
-//    public static void findElementInElement() {}
-
 
     public static Actions moveToElement(WebElement webElement) {
         Actions moveTo = new Actions(Browser.getWebDriver());
@@ -84,8 +101,9 @@ public class Browser {
             WebDriverWait wait = new WebDriverWait(getWebDriver(), Duration.ofSeconds(TIME_OUT_IN_SECONDS));
             wait.until(ExpectedConditions.presenceOfElementLocated(locator));
             WebElement element = getWebDriver().findElement(locator);
-        } catch (NotFoundException ex) {
+        } catch (NotFoundException | TimeoutException ex) {
             System.out.println(ex.getMessage());
+            logger.error(ex.getMessage());
         }
     }
 

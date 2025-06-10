@@ -57,6 +57,7 @@ public class MediaPage extends BasePage {
 
     @Step("Checking whether the media file is uploaded")
     public boolean isFileUploaded() {
+        searchMedia();
         WebElement uploadedFileElement = Browser.waitForElementToBeClickable(UPLOADED_FILE_LOCATOR);
         return uploadedFileElement != null && uploadedFileElement.isDisplayed();
     }

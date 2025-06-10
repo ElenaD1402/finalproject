@@ -1,6 +1,7 @@
 package org.elena.finalproject.elements;
 
 import io.qameta.allure.Step;
+import org.apache.log4j.Logger;
 import org.elena.finalproject.webDriver.Browser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -15,16 +16,19 @@ public class Header {
     private static final By LOG_OUT_LOCATOR = By.xpath("//a[(contains(text(),'Log Out'))]");
     private static final By LOGGED_OUT_LOCATOR = By.xpath("//*[contains(text(),'You are now logged out.')]");
 
-    @Step("Clicking 'Logo' in the header. Opening 'Home' page")
+    private Logger logger = Logger.getLogger(this.getClass());
+
+    @Step("User clicks 'Logo' in the header")
     public void goToHomePage() {
         WebElement logoElement = Browser.waitForElementToBeVisible(LOGO_LOCATOR);
         Browser.moveToElement(logoElement).perform();
         Browser.waitExpanding(LOGO_HOVER_LOCATOR);
         WebElement logoHoverElement = Browser.waitForElementToBeClickable(LOGO_HOVER_LOCATOR);
         logoHoverElement.click();
+        logger.info("Clicking 'Logo' in the header. Opening 'Home' page");
     }
 
-    @Step("Logging out")
+    @Step("User logs out")
     public void logOut() {
         WebElement profileMenuElement = Browser.waitForElementToBeVisible(PROFILE_MENU_LOCATOR);
         Browser.moveToElement(profileMenuElement).perform();
@@ -32,5 +36,6 @@ public class Header {
         WebElement logOutElement = Browser.waitForElementToBeClickable(LOG_OUT_LOCATOR);
         Browser.moveToElement(logOutElement).click().perform();
         Browser.waitForElementToBeVisible(LOGGED_OUT_LOCATOR);
+        logger.info("Logging out");
     }
 }

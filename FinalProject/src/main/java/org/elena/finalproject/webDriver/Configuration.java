@@ -1,5 +1,7 @@
 package org.elena.finalproject.webDriver;
 
+import org.apache.log4j.Logger;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -7,6 +9,8 @@ import java.util.Properties;
 public class Configuration {
 
     private static Properties properties;
+
+    private static Logger logger = Logger.getLogger(Configuration.class);
 
     private Configuration() {
     }
@@ -24,6 +28,7 @@ public class Configuration {
             properties.load(new FileInputStream("src/main/resources/project.properties"));
         } catch (IOException ex) {
             System.out.println("Cannot read the properties");
+            logger.error("Cannot read the properties");
         }
     }
 
@@ -31,12 +36,12 @@ public class Configuration {
         return BrowserEnum.valueOf(getProperties().get("browser").toString());
     }
 
-    public static String getBaseUrl() {
-        return getProperties().get("baseUrl").toString();
+    public static String getChromeDriverLocation() {
+        return properties.getProperty("chromeDriverLocation");
     }
 
-    public static String getDownloadDirectory() {
-        return properties.get("downloadDirectory").toString();
+    public static String getBaseUrl() {
+        return getProperties().get("baseUrl").toString();
     }
 
     public static String getRemoteDriverUrl() {
