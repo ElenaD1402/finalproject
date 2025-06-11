@@ -1,0 +1,13 @@
+<suite name="Admin" verbose="1" parallel="none" thread-count="1" data-provider-thread-count="1">
+    <listeners> </listeners>
+    <test name="Smoke">
+        <classes>
+            <class name="org.elena.finalproject.tests.AdminMenuListTest"/>
+            <class name="org.elena.finalproject.tests.MediaTest"/>
+            <class name="org.elena.finalproject.tests.PageTest"/>
+            <class name="org.elena.finalproject.tests.PostTest"/>
+            <class name="org.elena.finalproject.tests.TagTest"/>
+            <class name="org.elena.finalproject.tests.CategoryTest"/>
+        </classes>
+    </test>
+</suite>
