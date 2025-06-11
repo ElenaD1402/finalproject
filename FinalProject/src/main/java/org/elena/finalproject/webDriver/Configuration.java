@@ -26,6 +26,7 @@ public class Configuration {
         properties = new Properties();
         try {
             properties.load(new FileInputStream("src/main/resources/project.properties"));
+            properties.putAll(System.getenv());
         } catch (IOException ex) {
             System.out.println("Cannot read the properties");
             logger.error("Cannot read the properties");
