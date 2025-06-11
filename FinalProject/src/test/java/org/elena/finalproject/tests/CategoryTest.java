@@ -5,7 +5,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import org.apache.log4j.Logger;
-import org.elena.finalproject.credentials.UserEnum;
+import org.elena.finalproject.users.UserEnum;
 import org.elena.finalproject.models.Category;
 import org.elena.finalproject.pages.DashboardPage;
 import org.elena.finalproject.pages.LoginPage;
@@ -39,7 +39,7 @@ public class CategoryTest {
         try {
             loginPage.openLoginPage();
             Assert.assertTrue(loginPage.isPageOpened(), "'Login' page is not opened");
-            loginPage.logIn(UserEnum.ADMINISTRATOR.getUsername(), UserEnum.ADMINISTRATOR.getPassword());
+            loginPage.logIn(UserEnum.ADMINISTRATOR.getUsername(), System.getenv("admin_test"));
             Assert.assertTrue(dashboardPage.isPageOpened(), "'Dashboard' page is not opened");
         } catch (AssertionError | NullPointerException e) {
             logger.error(e.getMessage());

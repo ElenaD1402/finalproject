@@ -14,7 +14,7 @@ pipeline {
         stage('Build') {
             steps {
                 // Get some code from a GitHub repository.
-                git branch: 'finalproject', url: 'https://github.com/ElenaD1402/finalproject.git'
+                git branch: 'main', url: 'https://github.com/ElenaD1402/finalproject.git'
 
                 // Run Maven on a Windows agent.
                 bat "mvn -f FinalProject clean test -Dbrowser=${params.browser}"
